@@ -71,5 +71,5 @@ def pull_top_posts(tested_subs, fields, num_posts, filename, reddit):
 
 scheduler = BlockingScheduler()
 scheduler.add_job(pull_wrapper,
-                  'interval', hours=2)
+                  'interval', hours=1)
 scheduler.start()
