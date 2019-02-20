@@ -1,4 +1,5 @@
 Reddit/data
 .env
 .DS_Store
+/data
 Reddit/.ipynb_checkpoints/
