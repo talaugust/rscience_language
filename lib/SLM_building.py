@@ -63,10 +63,9 @@ MONTHS = list(range(1,13))
 ##################################################################
 def get_active_users(author_df, month, author_col, threshold=5, num_authors=200, kind=None):
     if kind:
-        print(kind)
         author_df = author_df[author_df['kind'] == kind]
     if num_authors: 
-        display(author_df[author_df[month] > threshold].drop_duplicates().sample(num_authors))
+        print(len(author_df[author_df[month] > threshold]))
         return author_df[author_df[month] > threshold].drop_duplicates().sample(num_authors)[author_col]
     else: 
         return author_df[author_df[month] > threshold].drop_duplicates()[author_col]
@@ -79,7 +78,7 @@ def get_active_users(author_df, month, author_col, threshold=5, num_authors=200,
 # ASSUMING: this is one 10 word span from each comment, not 5 for each comment
 ##################################################################
 def get_random_span(text, length):
-    text = [w.lower() for w in word_tokenize(text)]
+    text = [w for w in word_tokenize(text)]
     try: 
         beg = random.randint(0, len(text) - length)
         end = beg + 10
@@ -124,7 +123,7 @@ def build_SLMs(df, author_counts, slm_count, month):
     return slms
 
 # returns dict of {month:SLM}
-def build_monthly_SLM(df, author_counts, slm_count):
+def build_monthly_SLM(df, author_counts, slm_count,):
     slm_dict = {}
     for m in MONTHS:
         slms = build_SLMs(df, author_counts, slm_count, month=m)
@@ -169,16 +168,14 @@ def get_outside_users(author_df, month, author_col, threshold=1, num_authors=Non
 ##################################################################
 def get_user_comments(df, authors, month, num_posts, month_col='created_month'):
     df_month = df[df[month_col] == month]
-    display(df_month)
     df_month_author = df_month[df_month['author'].apply(lambda x: x in authors)]
     df_grouped = df_month_author.groupby('author')
     sampled_comments = []
     for a, g in df_grouped:
         if num_posts:
-            print(a, len(g))
-            sample = g.sample(num_posts)['body'].apply(lambda x: [w.lower() for w in word_tokenize(x)][:10]) 
+            sample = g.sample(num_posts)['body'].apply(lambda x: [w for w in word_tokenize(x)][:10]) 
         else: 
-            sample = g['body'].apply(lambda x: [w.lower() for w in word_tokenize(x)][:10]) 
+            sample = g['body'].apply(lambda x: [w for w in word_tokenize(x)][:10]) 
         sampled_comments.extend(sample)
     return sampled_comments
 
@@ -240,12 +237,12 @@ def calc_acc_gap(slms, author_counts, comments):
 ###################################################################
 # Importing data
 ###################################################################
-def import_csvs(sub, path='cleaned/train/2017/', ext='_train_2017.csv', comment_pre_path='../cleaned/sub_comments/'):
+def import_csvs(sub, path='data/cleaned/train/2017/', ext='_train_2017.csv', comment_pre_path='data/cleaned/sub_comments/', comment_ext='_comments_2017.csv'):
     
     # currently importing the same comments file for test/train
     # This is because the authors have been seperated, so there shouldn't be any of the same messages
     # between the two sets (even though they pull text from the same file)
-    comment_path = comment_pre_path+sub+'_comments_2017.csv'
+    comment_path = comment_pre_path+sub+comment_ext
     
     author_path = path+'author_counts/'+sub+'_author_counts'+ext
     
