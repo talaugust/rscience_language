@@ -42,7 +42,7 @@ decorator==4.1.2
 dictset==0.3.1.2
 dill==0.2.8.2
 distributed==1.18.3
-Django==1.11.6
+Django==1.11.28
 django-crowdsourcing==1.1.46
 django-filter==1.1.0
 django-mysql==2.1.1
