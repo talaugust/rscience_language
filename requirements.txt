@@ -57,7 +57,7 @@ entrypoints==0.2.3
 et-xmlfile==1.0.1
 fastcache==1.0.2
 filelock==2.0.12
-Flask==0.12.4
+Flask==1.0
 Flask-Cors==3.0.3
 future==0.17.1
 gensim==3.5.0
